@@ -8,6 +8,10 @@ app.use(express.json());
 require("./userDetails");
 const jwt = require("jsonwebtoken")
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+
+
 const JWT_SECRET = "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 
 
@@ -20,6 +24,21 @@ mongoose.connect(mongoUrl, {
 
 
 const User=mongoose.model("User");
+
+
+// app.post("/addData", (req, res) => {
+//     // Create a new data object based on the request body
+//     const newData = new Data({
+//         username: req.body.username,
+//         contact: req.body.contact,
+//         birthdate: req.body.birthdate
+//       });
+  
+//     // Save the data to the database
+//     newData.save
+
+// });
+
 
 app.get("/getAllUser", async(req, res) => {
     try{
@@ -75,6 +94,20 @@ app.post("/login-user",async(req,res) => {
     }
     res.json({status:"error", error:"Invalid Password"});
 });
+
+
+app.post("/deleteUser", async(req,res) =>{
+    const {userid} = req.body;
+    try{
+    User.deleteOne({_id:userid}, function (err,res){
+        console.log(err);
+    });
+    res.send({status:"Ok", data:"Deleted the User!"});
+    } catch(error){
+      console.log(error);
+    }
+});
+
 
 
 app.listen(5000,() => {
